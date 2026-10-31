@@ -1,8 +1,7 @@
-/* Add your Supabase Project URL and publishable/anon key here.
-   Never put a service_role key in this public repository. */
+/* Add your Supabase Project URL and publishable/anon key here. Never put a service_role key in this public repository. */
 window.BARAEM_CONFIG = {
-  supabaseUrl: "PASTE_SUPABASE_PROJECT_URL_HERE",
-  supabaseAnonKey: "PASTE_SUPABASE_PUBLISHABLE_KEY_HERE"
+  supabaseUrl: "https://jhykcwrosmhauasvgdvz.supabase.co",
+  supabaseAnonKey: "sb_publishable_zPWHBWXlEErn-fLTMA26gQ_Q6853nML"
 };
 
 window.getBaraemSupabase = function () {
