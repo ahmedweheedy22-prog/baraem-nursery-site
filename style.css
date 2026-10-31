@@ -27,3 +27,4 @@
 .gallery-grid img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}
 .gallery-grid figure:hover img{transform:scale(1.035)}
 @media(max-width:680px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-grid figure{height:180px;border-radius:16px}}
+.gallery-empty{max-width:700px;margin:0 auto;text-align:center;color:var(--muted);padding:24px;background:#f7f5ee;border-radius:18px}

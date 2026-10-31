@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       if(type==='image'){
         input.placeholder='رابط الصورة بعد الرفع';
         const upload=document.createElement('input');upload.type='file';upload.accept='image/jpeg,image/png,image/webp,image/avif';upload.setAttribute('aria-label','رفع '+title);
-        const hint=document.createElement('small');hint.textContent='يمكنك لصق رابط صورة أو رفع ملف (حتى 50 ميجابايت).';
+        const hint=document.createElement('small');hint.textContent=key==='wide_banner_image'?'لأفضل شكل على الشاشات، استخدمي صورة أفقية بعرض 1920×600 بكسل تقريبًا.':'ارفعي صور المكان، ويفضل أن تكون أفقية بنسبة 4:3 وبعرض 1200 بكسل أو أكثر. الحد الأقصى 50 ميجابايت.';
         upload.addEventListener('change',async()=>{const file=upload.files&&upload.files[0];if(!file)return;if(file.size>50*1024*1024){hint.textContent='حجم الصورة أكبر من 50 ميجابايت.';return;}hint.textContent='جارٍ رفع الصورة…';const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_'),path=key+'/'+Date.now()+'-'+safe;const uploaded=await client.storage.from('baraem-media').upload(path,file,{upsert:false,contentType:file.type});if(uploaded.error){hint.textContent='تعذر الرفع: '+uploaded.error.message;return;}input.value=client.storage.from('baraem-media').getPublicUrl(path).data.publicUrl;hint.textContent='تم الرفع. احفظ التغييرات لتظهر الصورة.';});
         label.append(upload,hint);
       }
