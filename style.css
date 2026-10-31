@@ -18,3 +18,12 @@
   
 .inquiry-form{max-width:650px;margin:22px auto 0;background:#fff;padding:28px;border-radius:24px;box-shadow:var(--shadow);display:grid;gap:14px}.inquiry-form h3{font:700 20px 'Alexandria';margin:0}.inquiry-form label{display:grid;gap:6px;font-size:14px;font-weight:700}.inquiry-form input,.inquiry-form textarea{font:inherit;border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fffdfa;color:var(--ink)}.inquiry-form button{justify-self:start}.inquiry-form #form-status{margin:0;color:var(--green);font-weight:700}.inquiry-form #form-status.error{color:#b44431}
 .inquiry-form .privacy-note{font-size:12px;color:var(--muted);margin:0}
+/* Wide photo banner and nursery photo gallery */
+.wide-banner{width:100%;height:clamp(220px,36vw,500px);overflow:hidden;background:#e9efdf}
+.wide-banner img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.gallery{background:#fff}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.gallery-grid figure{margin:0;height:clamp(190px,24vw,320px);overflow:hidden;border-radius:22px;background:#edf0e7;box-shadow:var(--shadow)}
+.gallery-grid img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.gallery-grid figure:hover img{transform:scale(1.035)}
+@media(max-width:680px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-grid figure{height:180px;border-radius:16px}}
