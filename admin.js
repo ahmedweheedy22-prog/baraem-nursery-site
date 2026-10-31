@@ -1,78 +1,64 @@
 document.addEventListener('DOMContentLoaded', async function () {
-  var client = window.getBaraemSupabase && window.getBaraemSupabase();
-  var loginPanel = document.getElementById('login-panel');
-  var dashboard = document.getElementById('dashboard');
-  var loginStatus = document.getElementById('login-status');
-  if (!client) { loginStatus.textContent = 'أضيفي بيانات مشروع Supabase في assets/js/config.js أولًا.'; loginStatus.classList.add('error'); return; }
-
-  var fields = [
-    ['hero_line1','العنوان الرئيسي — السطر الأول','text'],['hero_highlight','العنوان الرئيسي — الكلمة المميزة','text'],['hero_text','وصف البانر','textarea'],
-    ['hero_image','صورة البانر','url'],['program_title','عنوان قسم البرنامج','text'],['program_text','وصف قسم البرنامج','textarea'],
-    ['program_image','صورة قسم البرنامج','url'],['whatsapp','رقم واتساب مع كود الدولة، بدون +','text'],
-    ['phone_display','رقم الهاتف الظاهر للزوار','text'],['address','عنوان الحضانة','text'],['email','البريد الإلكتروني','email'],
-    ['review_text','نص رأي ولي الأمر','textarea'],['review_name','اسم صاحب/ة الرأي','text']
+  const client = window.getBaraemSupabase && window.getBaraemSupabase();
+  const loginPanel=document.getElementById('login-panel'), dashboard=document.getElementById('dashboard'), loginStatus=document.getElementById('login-status');
+  if(!client){loginStatus.textContent='راجعي إعدادات اتصال قاعدة البيانات.';loginStatus.classList.add('error');return;}
+  const fields=[
+    ['page_title','عنوان الموقع في المتصفح'],['meta_description','وصف الموقع لمحركات البحث','textarea'],['announcement','الشريط العلوي'],['announcement_highlight','النص المميز في الشريط'],['brand_name','اسم الحضانة'],['brand_tagline','وصف الشعار القصير'],['logo_image','صورة الشعار','image'],['favicon_image','أيقونة التبويب','image'],
+    ['nav_about','القائمة: عن براعم'],['nav_program','القائمة: برنامجنا'],['nav_day','القائمة: يوم طفلك'],['nav_reviews','القائمة: آراء الأهالي'],['nav_contact','القائمة: تواصل معنا'],['nav_cta','زر القائمة'],
+    ['hero_eyebrow','عبارة البانر الصغيرة'],['hero_line1','العنوان الرئيسي — السطر الأول'],['hero_highlight','العنوان الرئيسي — الكلمة المميزة'],['hero_text','وصف البانر','textarea'],['hero_image','صورة البانر','image'],['hero_alt','وصف صورة البانر لقارئات الشاشة'],['hero_button','زر البانر الرئيسي'],['hero_secondary','زر البانر الثاني'],['trust_title','عنوان الثقة'],['trust_text','وصف الثقة'],['hero_image_caption','عنوان فوق صورة البانر'],['hero_image_subcaption','وصف صورة البانر'],['hero_card_text','نص البطاقة العائمة'],
+    ['features_eyebrow','عبارة قسم المميزات'],['features_title','عنوان قسم المميزات'],['features_intro','مقدمة قسم المميزات','textarea'],...['1','2','3'].flatMap(n=>[['feature'+n+'_icon','رمز الميزة '+n],['feature'+n+'_title','عنوان الميزة '+n],['feature'+n+'_text','وصف الميزة '+n,'textarea']]),
+    ['program_eyebrow','عبارة قسم البرنامج'],['program_title','عنوان قسم البرنامج'],['program_text','وصف قسم البرنامج','textarea'],['program_image','صورة قسم البرنامج','image'],['program_alt','وصف صورة البرنامج لقارئات الشاشة'],['program_caption','عبارة على صورة البرنامج'],['program_point1','نقطة البرنامج الأولى'],['program_point2','نقطة البرنامج الثانية'],['program_point3','نقطة البرنامج الثالثة'],['program_button','زر قسم البرنامج'],
+    ['day_eyebrow','عبارة قسم اليوم'],['day_title','عنوان قسم اليوم'],['day_intro','مقدمة قسم اليوم','textarea'],...['1','2','3','4'].flatMap(n=>[['day'+n+'_eyebrow','عبارة الفترة '+n],['day'+n+'_title','عنوان الفترة '+n],['day'+n+'_text','وصف الفترة '+n,'textarea']]),
+    ['review_stars','علامات التقييم'],['review_text','نص رأي ولي الأمر','textarea'],['review_name','اسم صاحب/ة الرأي'],['review_attribution','وصف صاحب الرأي'],['contact_title','عنوان قسم التواصل'],['contact_text','وصف قسم التواصل','textarea'],['whatsapp_button','نص زر واتساب'],['whatsapp','رقم واتساب مع كود الدولة، بدون +'],['phone_display','رقم الهاتف الظاهر للزوار'],['address','عنوان الحضانة'],['email','البريد الإلكتروني'],
+    ['form_title','عنوان نموذج التواصل'],['form_name_label','اسم ولي الأمر — تسمية الحقل'],['form_phone_label','رقم الهاتف — تسمية الحقل'],['form_message_label','الرسالة — تسمية الحقل'],['privacy_note','ملاحظة الخصوصية'],['form_button','نص زر إرسال النموذج'],
+    ['instagram_url','رابط إنستغرام'],['facebook_url','رابط فيسبوك'],['tiktok_url','رابط تيك توك'],['youtube_url','رابط يوتيوب'],['footer_intro','نبذة الفوتر','textarea'],['footer_col1_title','عنوان عمود الفوتر الأول'],['footer_col1_link1','رابط الفوتر الأول — 1'],['footer_col1_link2','رابط الفوتر الأول — 2'],['footer_col1_link3','رابط الفوتر الأول — 3'],['footer_col2_title','عنوان عمود الفوتر الثاني'],['footer_col2_link1','رابط الفوتر الثاني — 1'],['footer_col2_link2','رابط الفوتر الثاني — 2'],['footer_col2_link3','رابط الفوتر الثاني — 3'],['footer_col3_title','عنوان عمود معلومات التواصل'],['copyright_text','حقوق النشر'],['footer_credit','عبارة أسفل الموقع']
   ];
-  function setStatus(id, text, error) { var el=document.getElementById(id); el.textContent=text; el.classList.toggle('error',!!error); }
-  function escapeText(value) { return String(value || '').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
-
-  async function showDashboard() {
-    loginPanel.hidden = true; dashboard.hidden = false;
-    var loaded = await client.from('site_content').select('key,value').order('key');
-    if (loaded.error) { setStatus('content-status','تعذر تحميل المحتوى: '+loaded.error.message,true); return; }
-    var values=Object.fromEntries((loaded.data||[]).map(function(x){return [x.key,x.value]}));
-    var form=document.getElementById('content-form'); form.replaceChildren();
-    fields.forEach(function(field){
-      var label=document.createElement('label'); label.textContent=field[1];
-      var input=field[2]==='textarea'?document.createElement('textarea'):document.createElement('input');
-      if(field[2]!=='textarea') input.type=field[2]; input.name=field[0]; input.value=values[field[0]]||'';
-      label.appendChild(input);
-      if(field[0]==='hero_image'||field[0]==='program_image'){
-        var upload=document.createElement('input');upload.type='file';upload.accept='image/jpeg,image/png,image/webp,image/avif';upload.setAttribute('aria-label','رفع صورة');
-        var uploadStatus=document.createElement('small');
-        upload.addEventListener('change',async function(){
-          var file=upload.files&&upload.files[0];if(!file)return;
-          if(file.size>50*1024*1024){uploadStatus.textContent='حجم الصورة أكبر من 50 ميجابايت.';return;}
-          uploadStatus.textContent='جارٍ رفع الصورة…';
-          var safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-          var path=field[0]+'/'+Date.now()+'-'+safeName;
-          var uploaded=await client.storage.from('baraem-media').upload(path,file,{upsert:false,contentType:file.type});
-          if(uploaded.error){uploadStatus.textContent='تعذر الرفع: '+uploaded.error.message;return;}
-          input.value=client.storage.from('baraem-media').getPublicUrl(path).data.publicUrl;
-          uploadStatus.textContent='تم رفع الصورة. احفظي التغييرات لتظهر على الموقع.';
-        });
-        label.appendChild(upload);label.appendChild(uploadStatus);
+  const status=(id,msg,error=false)=>{const el=document.getElementById(id);el.textContent=msg;el.classList.toggle('error',error);};
+  const escape=value=>String(value||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  async function readPageDefaults(){
+    try{
+      const html=await fetch('index.html').then(r=>r.text()),doc=new DOMParser().parseFromString(html,'text/html'),out={};
+      doc.querySelectorAll('[data-content]').forEach(n=>out[n.dataset.content]=n.textContent);
+      const targets=[
+        ['.topbar','announcement'],['.topbar b','announcement_highlight'],['header .brand span:last-child','brand_name',1],['header .brand small','brand_tagline'],['.links a:nth-child(1)','nav_about'],['.links a:nth-child(2)','nav_program'],['.links a:nth-child(3)','nav_day'],['.links a:nth-child(4)','nav_reviews'],['.links a:nth-child(5)','nav_contact'],['.nav-cta','nav_cta',1],['.hero-copy .eyebrow','hero_eyebrow'],['.hero-actions .btn','hero_button',1],['.hero-actions .btn-light','hero_secondary',1],['.trust b','trust_title'],['.trust>span:last-child','trust_text'],['.visual-note','hero_image_caption',1],['.visual-note small','hero_image_subcaption'],['.float-card span','hero_card_text'],['#about .section-head .eyebrow','features_eyebrow'],['#about h2','features_title'],['#about .section-head p','features_intro'],['#program .approach-pic .pic-label','program_caption'],['#program .approach-copy .eyebrow','program_eyebrow'],['#program .ticks li:nth-child(1)','program_point1',1],['#program .ticks li:nth-child(2)','program_point2',1],['#program .ticks li:nth-child(3)','program_point3',1],['#program .approach-copy .btn','program_button',1],['#day .section-head .eyebrow','day_eyebrow'],['#day h2','day_title'],['#day .section-head p','day_intro'],['.stars','review_stars'],['.quote cite','review_attribution',1],['.visit-box h2','contact_title'],['.visit-box p','contact_text'],['#whatsapp-link','whatsapp_button',1],['.inquiry-form h3','form_title'],['.inquiry-form label:nth-of-type(1)','form_name_label',1],['.inquiry-form label:nth-of-type(2)','form_phone_label',1],['.inquiry-form label:nth-of-type(3)','form_message_label',1],['.privacy-note','privacy_note'],['.inquiry-form button','form_button'],['.footer-brand>p','footer_intro'],['.footer-col:nth-child(2) h3','footer_col1_title'],['.footer-col:nth-child(2) a:nth-child(1)','footer_col1_link1',1],['.footer-col:nth-child(2) a:nth-child(2)','footer_col1_link2',1],['.footer-col:nth-child(2) a:nth-child(3)','footer_col1_link3',1],['.footer-col:nth-child(3) h3','footer_col2_title'],['.footer-col:nth-child(3) a:nth-child(1)','footer_col2_link1',1],['.footer-col:nth-child(3) a:nth-child(2)','footer_col2_link2',1],['.footer-col:nth-child(3) a:nth-child(3)','footer_col2_link3',1],['.footer-col:nth-child(4) h3','footer_col3_title'],['.copyright span:first-child','copyright_text'],['.copyright span:last-child','footer_credit']
+      ];
+      targets.forEach(([selector,key,first])=>{const n=doc.querySelector(selector);if(!n)return;const text=first&&n.firstChild?.nodeType===3?n.firstChild.textContent:n.textContent;out[key]=String(text||'').trim();});
+      [1,2,3].forEach(n=>{const c=doc.querySelector('.cards .card:nth-child('+n+')');if(c){out['feature'+n+'_icon']=c.querySelector('.icon')?.textContent||'';out['feature'+n+'_title']=c.querySelector('h3')?.textContent||'';out['feature'+n+'_text']=c.querySelector('p')?.textContent||'';}});
+      [1,2,3,4].forEach(n=>{const c=doc.querySelector('.day-item:nth-child('+n+')');if(c){out['day'+n+'_eyebrow']=c.querySelector('b')?.textContent||'';out['day'+n+'_title']=c.querySelector('h3')?.textContent||'';out['day'+n+'_text']=c.querySelector('p')?.textContent||'';}});
+      ['hero_image','program_image'].forEach(key=>{const n=doc.querySelector('[data-image="'+key+'"]');if(n)out[key]=n.getAttribute('src')||'';});
+      out.hero_alt=doc.querySelector('.hero-img img')?.alt||'';out.program_alt=doc.querySelector('.approach-pic img')?.alt||'';out.page_title=doc.title;out.meta_description=doc.querySelector('meta[name="description"]')?.content||'';
+      return out;
+    }catch(_){return {};}
+  }
+  async function showDashboard(){
+    loginPanel.hidden=true;dashboard.hidden=false;
+    const loaded=await client.from('site_content').select('key,value').order('key');
+    if(loaded.error){status('content-status','تعذر تحميل المحتوى: '+loaded.error.message,true);return;}
+    const values=Object.assign(await readPageDefaults(),Object.fromEntries((loaded.data||[]).map(x=>[x.key,x.value]))),form=document.getElementById('content-form');form.replaceChildren();
+    let currentGroup='';
+    fields.forEach(field=>{
+      const [key,title,type='text']=field;
+      const group=key.startsWith('feature')?'المميزات':key.startsWith('program_')?'البرنامج':key.startsWith('day')?'يوم الطفل':key.startsWith('review_')?'آراء الأهالي':key.startsWith('contact_')||key==='whatsapp'||key==='phone_display'||key==='address'||key==='email'||key.startsWith('form_')||key==='privacy_note'?'التواصل والاستفسارات':key.startsWith('footer_')||key==='copyright_text'?'تذييل الموقع':key.startsWith('hero_')||key==='trust_title'||key==='trust_text'?'البانر الرئيسي':'الهوية وإعدادات الصفحة';
+      if(group!==currentGroup){const h=document.createElement('h3');h.className='field-group';h.textContent=group;form.appendChild(h);currentGroup=group;}
+      const label=document.createElement('label');label.textContent=title;
+      const input=type==='textarea'?document.createElement('textarea'):document.createElement('input');
+      if(type!=='textarea'&&type!=='image')input.type=key.endsWith('_url')?'url':key==='email'?'email':'text';
+      input.name=key;input.value=values[key]||'';label.appendChild(input);
+      if(type==='image'){
+        input.placeholder='رابط الصورة بعد الرفع';
+        const upload=document.createElement('input');upload.type='file';upload.accept='image/jpeg,image/png,image/webp,image/avif';upload.setAttribute('aria-label','رفع '+title);
+        const hint=document.createElement('small');hint.textContent='يمكنك لصق رابط صورة أو رفع ملف (حتى 50 ميجابايت).';
+        upload.addEventListener('change',async()=>{const file=upload.files&&upload.files[0];if(!file)return;if(file.size>50*1024*1024){hint.textContent='حجم الصورة أكبر من 50 ميجابايت.';return;}hint.textContent='جارٍ رفع الصورة…';const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_'),path=key+'/'+Date.now()+'-'+safe;const uploaded=await client.storage.from('baraem-media').upload(path,file,{upsert:false,contentType:file.type});if(uploaded.error){hint.textContent='تعذر الرفع: '+uploaded.error.message;return;}input.value=client.storage.from('baraem-media').getPublicUrl(path).data.publicUrl;hint.textContent='تم الرفع. احفظ التغييرات لتظهر الصورة.';});
+        label.append(upload,hint);
       }
       form.appendChild(label);
     });
     await loadEnquiries();
   }
-  async function loadEnquiries() {
-    var host=document.getElementById('enquiries-list'); host.replaceChildren();
-    var result=await client.from('enquiries').select('id,parent_name,phone,message,status,created_at').order('created_at',{ascending:false}).limit(100);
-    if(result.error){host.textContent='تعذر تحميل الاستفسارات: '+result.error.message;return;}
-    if(!result.data.length){host.textContent='لا توجد استفسارات حتى الآن.';host.className='enquiries-list empty-state';return;}
-    result.data.forEach(function(item){
-      var card=document.createElement('article');card.className='enquiry';
-      var body=document.createElement('div');var title=document.createElement('strong');title.textContent=item.parent_name+' · '+item.phone;
-      var msg=document.createElement('p');msg.textContent=item.message;var date=document.createElement('small');date.textContent=new Date(item.created_at).toLocaleString('ar-EG');
-      body.append(title,msg,date);card.appendChild(body);
-      if(item.status!=='done'){var button=document.createElement('button');button.type='button';button.textContent='تم التواصل';button.addEventListener('click',async function(){var u=await client.from('enquiries').update({status:'done'}).eq('id',item.id);if(!u.error)loadEnquiries();});card.appendChild(button);}else{var badge=document.createElement('small');badge.textContent='تم التواصل';card.appendChild(badge);}
-      host.appendChild(card);
-    });
-  }
-
-  var session=await client.auth.getSession(); if(session.data.session) await showDashboard();
-  client.auth.onAuthStateChange(function(event,session){if(session){showDashboard();}else{dashboard.hidden=true;loginPanel.hidden=false;}});
-  document.getElementById('login-form').addEventListener('submit',async function(event){
-    event.preventDefault();var data=new FormData(event.currentTarget);setStatus('login-status','جارٍ تسجيل الدخول…');
-    var result=await client.auth.signInWithPassword({email:String(data.get('email')),password:String(data.get('password'))});
-    if(result.error){setStatus('login-status','تعذر تسجيل الدخول. راجعي البريد وكلمة المرور.',true);return;}event.currentTarget.reset();
-  });
-  document.getElementById('logout').addEventListener('click',async function(){await client.auth.signOut();});
-  document.getElementById('content-form').addEventListener('submit',async function(event){
-    event.preventDefault();var data=new FormData(event.currentTarget);var rows=[];
-    fields.forEach(function(field){rows.push({key:field[0],value:String(data.get(field[0])||'').trim(),is_public:true});});
-    setStatus('content-status','جارٍ حفظ التغييرات…');var saved=await client.from('site_content').upsert(rows,{onConflict:'key'});
-    if(saved.error){setStatus('content-status','تعذر الحفظ: '+saved.error.message,true);return;}setStatus('content-status','اتحفظت التغييرات بنجاح.');
-  });
+  async function loadEnquiries(){const host=document.getElementById('enquiries-list');host.replaceChildren();const result=await client.from('enquiries').select('id,parent_name,phone,message,status,created_at').order('created_at',{ascending:false}).limit(100);if(result.error){host.textContent='تعذر تحميل الاستفسارات: '+result.error.message;return;}if(!result.data.length){host.textContent='لا توجد استفسارات حتى الآن.';host.className='enquiries-list empty-state';return;}result.data.forEach(item=>{const card=document.createElement('article');card.className='enquiry';const body=document.createElement('div'),title=document.createElement('strong'),msg=document.createElement('p'),date=document.createElement('small');title.textContent=item.parent_name+' · '+item.phone;msg.textContent=item.message;date.textContent=new Date(item.created_at).toLocaleString('ar-EG');body.append(title,msg,date);card.appendChild(body);if(item.status!=='done'){const button=document.createElement('button');button.type='button';button.textContent='تم التواصل';button.addEventListener('click',async()=>{const u=await client.from('enquiries').update({status:'done'}).eq('id',item.id);if(!u.error)loadEnquiries();});card.appendChild(button);}else{const badge=document.createElement('small');badge.textContent='تم التواصل';card.appendChild(badge);}host.appendChild(card);});}
+  const session=await client.auth.getSession();if(session.data.session)await showDashboard();
+  client.auth.onAuthStateChange((event,s)=>{if(s)showDashboard();else{dashboard.hidden=true;loginPanel.hidden=false;}});
+  document.getElementById('login-form').addEventListener('submit',async event=>{event.preventDefault();const data=new FormData(event.currentTarget);status('login-status','جارٍ تسجيل الدخول…');const result=await client.auth.signInWithPassword({email:String(data.get('email')),password:String(data.get('password'))});if(result.error){status('login-status','تعذر تسجيل الدخول. راجعي البريد وكلمة المرور.',true);return;}event.currentTarget.reset();});
+  document.getElementById('logout').addEventListener('click',async()=>client.auth.signOut());
+  document.getElementById('content-form').addEventListener('submit',async event=>{event.preventDefault();const data=new FormData(event.currentTarget),rows=fields.map(([key])=>({key,value:String(data.get(key)||'').trim(),is_public:true}));status('content-status','جارٍ حفظ كل التعديلات…');const saved=await client.from('site_content').upsert(rows,{onConflict:'key'});if(saved.error){status('content-status','تعذر الحفظ: '+saved.error.message,true);return;}status('content-status','اتحفظت كل التغييرات بنجاح. حدّثي الموقع لمشاهدتها.');});
 });
